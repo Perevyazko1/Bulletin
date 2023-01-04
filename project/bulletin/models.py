@@ -32,14 +32,14 @@ class Post(models.Model):
     )
 
     title = models.CharField(max_length=128, verbose_name='Заголовок')
-    text = models.CharField(max_length=1024, default=' ')  # CKEditor Rich Text Field
+    text = RichTextUploadingField()
     response = models.ManyToManyField(User, related_name='rating')
 
     def total_response(self):
         return self.response.count()
 
-    # def get_absolute_url(self):
-    #     return reverse('news_detail', args=[str(self.id)])
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
 
     def __str__(self):
         return f'{self.title}| {self.text[:20]}'

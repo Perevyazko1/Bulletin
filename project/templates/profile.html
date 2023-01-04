@@ -10,8 +10,9 @@
     <h2>Отклики : </h2>
 
 
-    {#{% if perms.simpleapp.add_news %}#}
-    {#<a href="{% url 'news_create' %}">{% trans "Add news"%}</a>#}
+    {% if perms.bulletin.add_news %}
+    <a href="{% url 'post_create' %}">{% trans "Add post"%}</a>
+    {%endif%}
     <p></p>
    {% if news %}
 

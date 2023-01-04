@@ -24,7 +24,7 @@ News
                         {% endfor %}
                     </small>
                      <p>
-                         <a href="{% url 'news_detail' new.id %}">{{ new.text|censor|truncatechars:20|safe}}</a>
+                         <a href="{% url 'post_detail' new.id %}">{{ new.text|censor|truncatechars:20|safe}}</a>
                     <small class="fw-bold"> ❤ {{ new.rating.count}}</small>
                      </p>
         </ul>
