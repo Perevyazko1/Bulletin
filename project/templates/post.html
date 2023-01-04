@@ -1,0 +1,61 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
+<!-- Название у нас будет Product -->
+{% block title %}
+News
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
+{% block content %}
+
+<p></p>
+   {% if post %}
+
+
+
+        <ul class="list-group-flush">
+           {% for new in post|dictsortreversed:"dateCreation"%}
+                    <small class="fw-bold">{{ new.dateCreation|date:'d M Y' }}</small>
+                    <small class="fw-bold">{{ new.title|censor }}&nbsp;</small>
+                    <small class="fw-bold">категории:
+                        {% for category in new.category.all %}
+                            <a href="{% url 'category_list' category.id %}"> {{ category }}</a>
+                        {% endfor %}
+                    </small>
+                     <p>
+                         <a href="{% url 'news_detail' new.id %}">{{ new.text|censor|truncatechars:20|safe}}</a>
+                    <small class="fw-bold"> ❤ {{ new.rating.count}}</small>
+                     </p>
+        </ul>
+                </tr>
+            {% endfor %}
+
+
+   {% else %}
+       <h2>Новостей нет, но вы держитесь!</h2>
+   {% endif %}
+    {# Добавляем пагинацию на страницу #}
+
+   {# Информация о предыдущих страницах #}
+   {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
+{% endblock content %}

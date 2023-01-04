@@ -1,0 +1,27 @@
+from django.contrib import admin
+from django.utils.safestring import mark_safe
+
+from .models import Post, PostCategory
+from django import forms
+from django.contrib import admin
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
+
+
+class PostAdminForm(forms.ModelForm):
+    text = forms.CharField(widget=CKEditorUploadingWidget())
+
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+
+class PostAdmin(admin.ModelAdmin):
+    form = PostAdminForm
+
+
+# admin.site.register(User)
+admin.site.register(Post, PostAdmin)
+admin.site.register(PostCategory)
+
+admin.site.site_title = 'Админ панель News Portal'
+admin.site.site_header = 'Админ панель News Portal'

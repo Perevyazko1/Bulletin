@@ -1,0 +1,47 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+<!-- Название у нас будет Product -->
+
+<html>
+
+  <meta charset="utf-8">
+
+<!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
+{% block content %}
+<!--<h1>{{ news }}</h1>-->
+   <h2> {{ post.title|censor }} </h2>
+<!--   <h3>{{ time_now|date:'M d Y' }}</h3>-->
+   <!-- Если в переменной next_sale будет None,
+   то выведется указанный в фильтре текст -->
+<!--   <h3> {{ next_sale|default_if_none:"Чуть позже сообщим о распродаже!" }} </h3>-->
+
+   <hr>
+   {% if post %}
+
+<!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
+        <h4>{{post.dateCreation|date:'d M Y'}}</h4>
+        <h4>
+
+            <style>
+                img {
+                    border: 3px solid #808080;
+                    }
+            </style>
+
+            <img
+                src="{{ post.image.url}}" style="max-height:400px" align="left"
+                style=" border: 20px solid #ffffff;"
+            />
+
+            <i>{{ post.text|censor|safe }}</i>
+        </h4>
+        <br><br><br>
+        <ul class="list-group-flush">
+                        </p>
+        </ul>
+    {% else %}
+       <h2>Новостей нет, но вы держитесь!</h2>
+   {% endif %}
+
+
+{% endblock content %}

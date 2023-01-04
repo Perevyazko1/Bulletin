@@ -1,0 +1,59 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% load i18n %}
+
+
+{% block content %}
+
+    <h1>{{profile}}</h1>
+    <h2>{{email}}</h2>
+    <h2>Отклики : </h2>
+
+
+    {#{% if perms.simpleapp.add_news %}#}
+    {#<a href="{% url 'news_create' %}">{% trans "Add news"%}</a>#}
+    <p></p>
+   {% if news %}
+
+           {% for new in post|dictsortreversed:"dateCreation"%}
+            <html class="list-group-item">
+                    <small class="fw-bold">{{ new.dateCreation|date:'d M Y' }}</small>
+                    <small class="fw-bold">{{ new.title|censor }}&nbsp;</small>
+                    <small class="fw-bold">категории:
+                        {% for category in new.category.all %}
+                            <a href="{% url 'category_list' category.id %}"> {{ category }}</a>
+                        {% endfor %}
+                    </small>
+                     <p>
+                         <a href="{% url 'news_detail' new.id %}">{{ new.text|censor|truncatechars:20|safe}}</a>
+                    <small class="fw-bold"> ❤ Тут нужно посчитать отклики</small>
+                     </p>
+                        {#{% if perms.simpleapp.add_news %}#}
+                        {#<a href="{% url 'news_update' pk=new.id %}">{% trans "change"%}</a>#}
+                        {#{% if perms.simpleapp.add_news %}#}
+                        {#<a href="{% url 'news_delete' pk=new.id %}">{% trans "delete"%}</a>#}
+            {% endfor %}
+
+
+   {% else %}
+       <h2>{% trans "You haven't posted any news yet."%}</h2>
+   {% endif %}
+   {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {{ page_obj.number }}
+
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
+{% endblock content %}
