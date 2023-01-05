@@ -34,6 +34,8 @@
             />
 
             <i>{{ post.text|censor|safe }}</i>
+            <p class="text-center"><a href="{% url 'like_post' post.id %}" class="btn btn-secondary btn-sm">❤ {{ count }}</a></p>
+
         </h4>
         <br><br><br>
         <ul class="list-group-flush">

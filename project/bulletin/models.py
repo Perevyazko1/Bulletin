@@ -33,10 +33,10 @@ class Post(models.Model):
 
     title = models.CharField(max_length=128, verbose_name='Заголовок')
     text = RichTextUploadingField()
-    response = models.ManyToManyField(User, related_name='rating')
+    like = models.ManyToManyField(User, related_name='rating')
 
-    def total_response(self):
-        return self.response.count()
+    def total_like(self):
+        return self.like.count()
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])

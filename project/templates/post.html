@@ -15,13 +15,7 @@ News
            {% for new in post|dictsortreversed:"dateCreation"%}
             <html class="list-group-item">
                     <p><small class="fw-bold">{{ new.dateCreation|date:'d M Y' }}</small>
-                    <small class="fw-bold">{{ new.title|censor }}&nbsp;</small>
-                        {% if perms.bulletin.add_post %}
-                    <small class="fw-bold"><a href="{% url 'post_update' pk=new.id %}">Изменить</a>
-                        {% endif %}
-                        {% if perms.bulletin.add_post %}
-                        <a href="{% url 'post_delete' pk=new.id %}">Удалить</a></small></p>
-                        {% endif %}
+                       <small class="fw-bold"><a href="{% url 'post_detail' new.id %}">{{ new.title|censor}}</a></small></p>
             {% endfor %}
 
 
