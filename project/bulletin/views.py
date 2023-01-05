@@ -1,7 +1,8 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import DetailView, ListView, CreateView
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
 from .forms import PostForm
 from .models import Post, User
@@ -14,9 +15,11 @@ class Profile(ListView):
     context_object_name = 'user'
 
     def get_context_data(self, **kwargs):
+        author = User.objects.get(id=self.request.user.id)
         context = super().get_context_data(**kwargs)
         context['profile'] = self.request.user
         context['email'] = self.request.user.email
+        context['post'] = Post.objects.filter(author=author)
         # добавляем в контекст все доступные часовые пояса
         return context
 
@@ -39,7 +42,7 @@ class PostDetail(DetailView):
         return context
 
 
-class NewsList(ListView):
+class PostList(ListView):
     model = Post
     ordering = 'title'
     template_name = 'post.html'
@@ -50,11 +53,8 @@ class NewsList(ListView):
 class PostCreate(PermissionRequiredMixin, CreateView):
     permission_required = ('bulletin.add_news',)
     raise_exception = True
-    # Указываем нашу разработанную форму
     form_class = PostForm
-    # модель товаров
     model = Post
-    # и новый шаблон, в котором используется форма.
     template_name = 'edit_post.html'
 
     def form_valid(self, form):  # Переопределение метода при валидации формы NewsForm
@@ -68,3 +68,17 @@ class PostCreate(PermissionRequiredMixin, CreateView):
         # пользователем-юзер
         return super().form_valid(
             form)
+
+
+class PostUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = ('bulletin.change_news',)
+    form_class = PostForm
+    model = Post
+    template_name = 'edit_post.html'
+
+
+class PostDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('bulletin.delete_news',)
+    model = Post
+    template_name = 'delete_post.html'
+    success_url = reverse_lazy('post_list')

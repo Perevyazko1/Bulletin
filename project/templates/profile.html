@@ -7,37 +7,29 @@
 
     <h1>{{profile}}</h1>
     <h2>{{email}}</h2>
-    <h2>Отклики : </h2>
 
 
-    {% if perms.bulletin.add_news %}
+    {% if perms.bulletin.add_post %}
     <a href="{% url 'post_create' %}">{% trans "Add post"%}</a>
     {%endif%}
     <p></p>
-   {% if news %}
+   {% if post %}
 
            {% for new in post|dictsortreversed:"dateCreation"%}
             <html class="list-group-item">
-                    <small class="fw-bold">{{ new.dateCreation|date:'d M Y' }}</small>
+                    <p><small class="fw-bold">{{ new.dateCreation|date:'d M Y' }}</small>
                     <small class="fw-bold">{{ new.title|censor }}&nbsp;</small>
-                    <small class="fw-bold">категории:
-                        {% for category in new.category.all %}
-                            <a href="{% url 'category_list' category.id %}"> {{ category }}</a>
-                        {% endfor %}
-                    </small>
-                     <p>
-                         <a href="{% url 'news_detail' new.id %}">{{ new.text|censor|truncatechars:20|safe}}</a>
-                    <small class="fw-bold"> ❤ Тут нужно посчитать отклики</small>
-                     </p>
-                        {#{% if perms.simpleapp.add_news %}#}
-                        {#<a href="{% url 'news_update' pk=new.id %}">{% trans "change"%}</a>#}
-                        {#{% if perms.simpleapp.add_news %}#}
-                        {#<a href="{% url 'news_delete' pk=new.id %}">{% trans "delete"%}</a>#}
+                        {% if perms.bulletin.add_post %}
+                    <small class="fw-bold"><a href="{% url 'post_update' pk=new.id %}">Изменить</a>
+                        {% endif %}
+                        {% if perms.bulletin.add_post %}
+                        <a href="{% url 'post_delete' pk=new.id %}">Удалить</a></small></p>
+                        {% endif %}
             {% endfor %}
 
 
    {% else %}
-       <h2>{% trans "You haven't posted any news yet."%}</h2>
+       <h2>{% trans "У Вас пока нет объявлений."%}</h2>
    {% endif %}
    {% if page_obj.has_previous %}
        <a href="?page=1">1</a>

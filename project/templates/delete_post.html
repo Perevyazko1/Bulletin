@@ -1,7 +1,7 @@
 {% extends 'flatpages/default.html' %}
 
 {% block content %}
-<h1 xmlns="http://www.w3.org/1999/html">Удаление новости: {{ object.title }}</h1>
+<h1 xmlns="http://www.w3.org/1999/html">Удаление объявления: {{ object.title }}</h1>
 <hr>
 <dialog open>
    <div>
@@ -11,7 +11,7 @@
                 <p><input type="submit" value="Удалить" /></p>
             </form>
 
-                <button onclick="window.location='http://127.0.0.1:8000/news/'">Отменить</button>
+                <button onclick="window.location='http://127.0.0.1:8000/bulletin/'">Отменить</button>
    </div>
 </dialog>
 {% endblock content %}
