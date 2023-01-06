@@ -43,3 +43,28 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.title}| {self.text[:20]}'
+
+
+class Response(models.Model):
+    class Meta:
+        verbose_name = u"Комментарий к новости"
+        verbose_name_plural = u"Комментарии к новостям"
+
+    commentPost = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Объявление')
+    commentUser = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    text = models.TextField(verbose_name='Отклик')
+    dateCreation = models.DateTimeField(auto_now_add=True, verbose_name='Дата')
+    status = models.BooleanField(default=False)
+
+
+    def update_status(self):
+        return Response.objects.filter(id=self.id).update(status=True)
+
+
+
+    def __str__(self):
+        return f'{self.dateCreation} {self.text} {self.commentUser}'
+    # def get_absolute_url(self):
+    #     return reverse('profile')
+
+

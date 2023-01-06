@@ -1,0 +1,21 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
+{% block content %}
+<h1>Отклики </h1>
+<hr>
+{{response}}
+
+           {% for response in responses|dictsortreversed:"dateCreation"%}
+            <html class="list-group-item">
+                    <p class="fw-bold">
+                    <small class="fw-bold">{{ response.dateCreation|date:'d M Y' }}</small>
+                    <small class="fw-bold">{{ response.text|censor }}&nbsp;</small></p>
+                    <p><small class="fw-bold">Отклик оставил: {{ response.commentUser }}&nbsp;</small>
+                        {% if response.status %}
+                            <a href="{% url 'accept_response' response.id %}" class="btn btn-secondary btn-sm">Отменить отклик</a>
+                            {% else %}
+                            <a href="{% url 'accept_response' response.id %}" class="btn btn-secondary btn-sm">Принять отклик</a></p>
+                        {% endif %}
+            {% endfor %}
+{% endblock content %}

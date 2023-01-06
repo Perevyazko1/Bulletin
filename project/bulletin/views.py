@@ -1,12 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
-from .forms import PostForm
-from .models import Post, User
+from .forms import PostForm, ResponseForm
+from .models import Post, User, Response
 
 
 class Profile(ListView):
@@ -95,3 +95,42 @@ def like_post(request, pk):
         n.like.add(u)
     return redirect(reverse('post_detail', args=[str(pk)]))
 
+
+class ResponseCreate(LoginRequiredMixin, CreateView):
+    raise_exception = True
+    form_class = ResponseForm
+    model = Response
+    template_name = 'response.html'
+    success_url = reverse_lazy('post_list')
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.commentUser = User.objects.get(
+            username=self.request.user)
+        self.object.commentPost = Post.objects.get(
+            id=self.kwargs["pk"])
+        return super().form_valid(
+            form)
+
+
+@login_required  # проверка зареган ли user
+def user_response(request, pk):
+    user = request.user
+    post = Post.objects.get(id=pk)
+    response = Response.objects.filter(commentPost=post,commentUser=user)
+
+    return render(request, 'user_response.html', {
+        'responses': response})
+
+
+@login_required  # проверка зареган ли user
+def accept_response(request, pk):
+    r = Response.objects.filter(id=pk)
+    response = Response.objects.get(id=pk)
+    p = response.commentPost.id
+    print(response.status)
+    if response.status:
+        r.update(status=False)
+    else:
+        r.update(status=True)
+    return redirect(reverse('user_response', args=[str(p)]))
