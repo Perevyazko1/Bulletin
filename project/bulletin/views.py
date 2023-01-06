@@ -118,7 +118,6 @@ def user_response(request, pk):
     user = request.user
     post = Post.objects.get(id=pk)
     response = Response.objects.filter(commentPost=post,commentUser=user)
-
     return render(request, 'user_response.html', {
         'responses': response})
 
@@ -128,9 +127,9 @@ def accept_response(request, pk):
     r = Response.objects.filter(id=pk)
     response = Response.objects.get(id=pk)
     p = response.commentPost.id
-    print(response.status)
     if response.status:
         r.update(status=False)
     else:
+        response.save()
         r.update(status=True)
     return redirect(reverse('user_response', args=[str(p)]))

@@ -4,7 +4,6 @@
 {% block content %}
 <h1>Отклики </h1>
 <hr>
-{{response}}
 
            {% for response in responses|dictsortreversed:"dateCreation"%}
             <html class="list-group-item">
