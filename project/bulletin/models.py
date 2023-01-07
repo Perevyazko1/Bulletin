@@ -3,6 +3,13 @@ from django.db import models
 from django.db.models import Count
 from django.urls import reverse
 from ckeditor_uploader.fields import RichTextUploadingField
+import uuid
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    uuid = models.UUIDField(default=uuid.uuid4)
+    # authenticate = models.BooleanField(default=)
 
 
 class PostCategory(models.Model):
@@ -56,15 +63,10 @@ class Response(models.Model):
     dateCreation = models.DateTimeField(auto_now_add=True, verbose_name='Дата')
     status = models.BooleanField(default=False)
 
-
     def update_status(self):
         return Response.objects.filter(id=self.id).update(status=True)
-
-
 
     def __str__(self):
         return f'{self.dateCreation} {self.text} {self.commentUser}'
     # def get_absolute_url(self):
     #     return reverse('profile')
-
-

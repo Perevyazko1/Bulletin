@@ -6,7 +6,7 @@ from django.db.models.signals import m2m_changed, post_delete, post_save, pre_de
 from django.dispatch import receiver
 from django.template.loader import render_to_string
 
-from .models import Response, Post
+from .models import Response, Post, Profile
 from django.core.mail import send_mail
 
 
@@ -99,4 +99,25 @@ def send_response(instance, **kwargs):
     post = r.commentPost.get_absolute_url()
     message = 'Вам оставили отклик.'
     send_email(user, email, post, message)
+
+
+@receiver(post_save, sender=User)
+def send_response(created,instance, **kwargs):
+    if created:
+        p=Profile.objects.create(user=instance)
+
+        # id = instance.id
+        # r = Response.objects.get(id=id)
+        # user = r.commentPost.author.username
+        email = [instance.email]
+        # post = r.commentPost.get_absolute_url()
+        # message = 'Вам оставили отклик.'
+        msg = EmailMultiAlternatives(
+            subject='Код авторизации',
+            body=f'Код авторизации {p.uuid}',  # это то же, что и message
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=email,  # это то же, что и recipients_list
+        )
+        msg.send()  # отсылаем
+
 
