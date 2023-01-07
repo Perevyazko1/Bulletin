@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
 ]
 SITE_URL = 'http://127.0.0.1:8000'
+LOGIN_REDIRECT_URL = "/bulletin"
+LOGOUT_REDIRECT_URL = "/bulletin"
 
 SITE_ID = 1
 
