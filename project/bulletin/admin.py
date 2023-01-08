@@ -21,7 +21,7 @@ class PostAdmin(admin.ModelAdmin):
 
 # admin.site.register(User)
 admin.site.register(Post, PostAdmin)
-admin.site.register(PostCategory)
+# admin.site.register(PostCategory)
 
-admin.site.site_title = 'Админ панель News Portal'
-admin.site.site_header = 'Админ панель News Portal'
+admin.site.site_title = 'Админ панель Доска объявлений'
+admin.site.site_header = 'Админ панель Доска объявлений'

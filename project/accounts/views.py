@@ -14,7 +14,7 @@ class SignUp(CreateView):
     success_url = '/accounts/login'
 
     template_name = 'registration/signup.html'
-    success_url = reverse_lazy('authenticate')
+    # success_url = reverse_lazy('authenticate')
 
 
 
@@ -32,9 +32,9 @@ def authenticate(request):
     print(code.uuid)
     if request.method =='POST':
         data = request.POST.get('code')
-    if str(code.uuid) == data:
-        a=AuthUser.objects.filter(user=request.user)
-        a.update(authenticate=True)
+        if str(code.uuid) == data:
+            a=AuthUser.objects.filter(user=request.user)
+            a.update(authenticate=True)
     # if form.is_valid():
     #     data = form.cleaned_data.get("code")
     #     print(data)

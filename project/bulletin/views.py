@@ -32,14 +32,10 @@ class PostDetail(DetailView):
     context_object_name = 'post'
     queryset = Post.objects.all()
 
-    # def get_context_data(self, *args, **kwargs):
-    #     context = super(PostDetail, self).get_context_data(**kwargs)
-    #     post = get_object_or_404(Post, id=self.kwargs["pk"])
-    #     # comment = get_object_or_404(Comment, id=self.kwargs["pk"])
-    #     # total_likes_comment = comment.total_likes_comment()
-    #     # context['count_comment'] = total_likes_comment
-    #     # context['comment'] = Comment.objects.filter(commentPost=self.kwargs["pk"])
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['authenticate'] = AuthUser.objects.get(user=self.request.user)
+        return context
 
 
 class PostList(ListView):
