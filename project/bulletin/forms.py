@@ -1,3 +1,4 @@
+from ckeditor_uploader.fields import RichTextUploadingField
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -47,3 +48,6 @@ class ResponseForm(forms.ModelForm):
             # 'commentPost',
             # 'commentUser',
         ]
+
+class SendMailForm(forms.Form):
+    text = forms.CharField(max_length=128)

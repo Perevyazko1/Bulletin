@@ -19,9 +19,11 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from accounts.views import authenticate
+from bulletin.views import send_mail
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('admin_send_mail/', send_mail, name='sendmail'),
     path('bulletin/', include('bulletin.urls')),
     path(r'ckeditor/', include('ckeditor_uploader.urls')),
     path('accounts/', include('django.contrib.auth.urls')),

@@ -3,9 +3,10 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
+from django.views import View
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
-from .forms import PostForm, ResponseForm
+from .forms import PostForm, ResponseForm, SendMailForm
 from .models import Post, User, Response, AuthUser
 
 
@@ -119,3 +120,28 @@ def accept_response(request, pk):
         response.save()
         r.update(status=True)
     return redirect(reverse('user_response', args=[str(p)]))
+
+
+# class SendMail(View):
+#     # raise_exception = True
+#     # form_class = ResponseForm
+#     # model = Response
+#     template_name = 'send_mail.html'
+#     success_url = reverse_lazy('sendmail')
+
+def send_mail(request):
+    form = SendMailForm(request.POST or None)
+    # print(code.uuid)
+    if request.method =='POST':
+        data = request.POST.get('text')
+    #     if str(code.uuid) == data:
+    #         a=AuthUser.objects.filter(user=request.user)
+    #         a.update(authenticate=True)
+    # if form.is_valid():
+    #     data = form.cleaned_data.get("code")
+        print(data)
+    return render(request, 'send_mail.html', {
+        # 'form': form,
+        'form': form
+
+    })
