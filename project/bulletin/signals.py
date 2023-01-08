@@ -77,9 +77,9 @@ def send_email(user, email, post, message):
     msg.send()  # отсылаем
 
 
-@receiver(pre_save, sender=Response)
+@receiver(post_save, sender=Response)
 def update_status_response(instance, **kwargs):
-    if instance.status:
+    if not instance.status:
         id = instance.id
         r = Response.objects.get(id=id)
         user = r.commentUser.username
@@ -90,15 +90,15 @@ def update_status_response(instance, **kwargs):
 
 
 @receiver(post_save, sender=Response)
-def get_response(instance, **kwargs):
-    id = instance.id
-    print(id)
-    r = Response.objects.get(id=id)
-    user = r.commentPost.author.username
-    email = [r.commentPost.author.email]
-    post = r.commentPost.get_absolute_url()
-    message = 'Вам оставили отклик.'
-    send_email(user, email, post, message)
+def get_response(created, instance, **kwargs):
+    if created:
+        id = instance.id
+        r = Response.objects.get(id=id)
+        user = r.commentPost.author.username
+        email = [r.commentPost.author.email]
+        post = r.commentPost.get_absolute_url()
+        message = 'Вам оставили отклик.'
+        send_email(user, email, post, message)
 
 
 @receiver(post_save, sender=User)
