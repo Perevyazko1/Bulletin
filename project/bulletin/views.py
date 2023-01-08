@@ -103,7 +103,7 @@ class ResponseCreate(LoginRequiredMixin, CreateView):
 def user_response(request, pk):
     user = request.user
     post = Post.objects.get(id=pk)
-    response = Response.objects.filter(commentPost=post,commentUser=user)
+    response = Response.objects.filter(commentPost=post)
     return render(request, 'user_response.html', {
         'responses': response})
 
