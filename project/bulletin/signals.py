@@ -56,7 +56,7 @@ from django.core.mail import send_mail
 #         group = Group.objects.get(id=2)
 #         user.groups.add(group)
 
-def send_email(user, email, post, message, subject):
+def send_email(user, email, post, message):
     html_content = render_to_string(
         'send_response.html',
         {
@@ -90,7 +90,7 @@ def update_status_response(instance, **kwargs):
 
 
 @receiver(post_save, sender=Response)
-def send_response(instance, **kwargs):
+def get_response(instance, **kwargs):
     id = instance.id
     print(id)
     r = Response.objects.get(id=id)
