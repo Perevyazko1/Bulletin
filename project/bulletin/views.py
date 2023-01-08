@@ -46,7 +46,7 @@ class PostList(ListView):
     paginate_by = 10
 
 
-class PostCreate(PermissionRequiredMixin, CreateView):
+class PostCreate(LoginRequiredMixin, CreateView):
     permission_required = ('bulletin.add_news',)
     raise_exception = True
     form_class = PostForm
@@ -66,14 +66,14 @@ class PostCreate(PermissionRequiredMixin, CreateView):
             form)
 
 
-class PostUpdate(PermissionRequiredMixin, UpdateView):
+class PostUpdate(LoginRequiredMixin, UpdateView):
     permission_required = ('bulletin.change_news',)
     form_class = PostForm
     model = Post
     template_name = 'edit_post.html'
 
 
-class PostDelete(PermissionRequiredMixin, DeleteView):
+class PostDelete(LoginRequiredMixin, DeleteView):
     permission_required = ('bulletin.delete_news',)
     model = Post
     template_name = 'delete_post.html'
