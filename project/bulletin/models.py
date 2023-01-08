@@ -31,19 +31,39 @@ class Post(models.Model):
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
     dateCreation = models.DateTimeField(auto_now_add=True, verbose_name='Дата')
-    category = models.ForeignKey(
-        to='PostCategory',
-        on_delete=models.CASCADE,
-        related_name='post',
-        verbose_name='Категория'  # все продукты в категории будут доступны через поле news
+    TANK = 'TNK'
+    HILL = 'HL'
+    DD = 'DD'
+    MERCHANT = 'MRCH'
+    GUILDMASTER = 'GMSTR'
+    QUESTGIVER = 'QGVR'
+    BLACKMITH = 'BLKMTH'
+    TANNER = 'TNR'
+    POTION = 'PTN'
+    MASTER_SPELL = 'MSTRSPL'
+
+    CATEGORY_CHOICES = (
+        (TANK, 'Танк'),
+        (HILL, 'Хилл'),
+        (DD, 'ДД'),
+        (MERCHANT, 'Торговец'),
+        (GUILDMASTER, 'Гилдмастер'),
+        (QUESTGIVER, 'Квестгивер'),
+        (BLACKMITH, 'Кузнец'),
+        (TANNER, 'Кожевник'),
+        (POTION, 'Зельевар'),
+        (MASTER_SPELL, 'Мастер заклинаний'),
     )
 
+    category = models.CharField(
+        max_length=128, choices=CATEGORY_CHOICES,
+        default=TANK, verbose_name='Тип' # все продукты в категории будут доступны через поле
+    )
+    # categoryType = models.CharField(max_length=2, choices=CATEGORY_CHOICES,
+    #                                 default=ARTICLE, verbose_name='Тип')
     title = models.CharField(max_length=128, verbose_name='Заголовок')
     text = RichTextUploadingField()
-    like = models.ManyToManyField(User, related_name='rating')
 
-    def total_like(self):
-        return self.like.count()
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
