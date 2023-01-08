@@ -6,7 +6,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
 from .forms import PostForm, ResponseForm
-from .models import Post, User, Response
+from .models import Post, User, Response, AuthUser
 
 
 class Profile(ListView):
@@ -21,6 +21,7 @@ class Profile(ListView):
         context['profile'] = self.request.user
         context['email'] = self.request.user.email
         context['post'] = Post.objects.filter(author=author)
+        context['authenticate'] = AuthUser.objects.get(user=self.request.user)
         # добавляем в контекст все доступные часовые пояса
         return context
 

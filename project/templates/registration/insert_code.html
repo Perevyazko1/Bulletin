@@ -1,0 +1,16 @@
+{% extends "flatpages/default.html" %}
+
+{% block content %}
+<h2>Введите код аутентификации, присланный на почту</h2>
+<form method="post">
+{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Send">
+</form>
+    {% if authenticate %}
+        <h2>Почта подтверждена!</h2>
+        <a href="{% url 'profile' %}" class="btn btn-secondary btn-sm">Пройти в личный кабинет</a></small>
+    {% else %}
+        <h2>Код не верный!</h2>
+    {% endif %}
+{% endblock %}

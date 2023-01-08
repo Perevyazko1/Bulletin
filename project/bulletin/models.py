@@ -6,10 +6,10 @@ from ckeditor_uploader.fields import RichTextUploadingField
 import uuid
 
 
-class Profile(models.Model):
+class AuthUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     uuid = models.UUIDField(default=uuid.uuid4)
-    # authenticate = models.BooleanField(default=)
+    authenticate = models.BooleanField(default=False)
 
 
 class PostCategory(models.Model):

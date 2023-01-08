@@ -18,12 +18,15 @@ from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from django.conf import settings
 
+from accounts.views import authenticate
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('bulletin/', include('bulletin.urls')),
     path(r'ckeditor/', include('ckeditor_uploader.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path("accounts/", include("accounts.urls")),
+    path("authenticate/", authenticate, name='authenticate'),
 ]
 
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

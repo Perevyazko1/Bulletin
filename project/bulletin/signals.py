@@ -6,7 +6,7 @@ from django.db.models.signals import m2m_changed, post_delete, post_save, pre_de
 from django.dispatch import receiver
 from django.template.loader import render_to_string
 
-from .models import Response, Post, Profile
+from .models import Response, Post, AuthUser
 from django.core.mail import send_mail
 
 
@@ -104,7 +104,7 @@ def send_response(instance, **kwargs):
 @receiver(post_save, sender=User)
 def send_response(created,instance, **kwargs):
     if created:
-        p=Profile.objects.create(user=instance)
+        p=AuthUser.objects.create(user=instance)
 
         # id = instance.id
         # r = Response.objects.get(id=id)

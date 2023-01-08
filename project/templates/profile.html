@@ -7,10 +7,12 @@
 
     <h1>{{profile}}</h1>
     <h2>{{email}}</h2>
+    {% if not authenticate.authenticate %}
+        <a href="{% url 'authenticate' %}" class="btn btn-secondary btn-sm">Подтвердить почту</a></small>
+    {% endif %}
 
-
-    {% if perms.bulletin.add_post %}
-    <a href="{% url 'post_create' %}">{% trans "Add post"%}</a>
+    {% if authenticate.authenticate %}
+        <p><a href="{% url 'post_create' %}" class="btn btn-secondary btn-sm">{% trans "Добавить объявление"%}</a></p>
     {%endif%}
     <p></p>
    {% if post %}
