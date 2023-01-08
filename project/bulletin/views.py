@@ -1,13 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
 from .forms import PostForm, ResponseForm, SendMailForm
 from .models import Post, User, Response, AuthUser
+from django.conf import settings
 
 
 class Profile(ListView):
@@ -134,12 +137,29 @@ def send_mail(request):
     # print(code.uuid)
     if request.method =='POST':
         data = request.POST.get('text')
-    #     if str(code.uuid) == data:
-    #         a=AuthUser.objects.filter(user=request.user)
-    #         a.update(authenticate=True)
-    # if form.is_valid():
-    #     data = form.cleaned_data.get("code")
-        print(data)
+        users = User.objects.all()
+        emails=[]
+        for user in users:
+            emails += [user.email]
+            # print(emails)
+
+        html_content = render_to_string(
+            'send_news.html',
+            {
+                'link': settings.SITE_URL,
+                'message': data
+            }
+        )
+
+        msg = EmailMultiAlternatives(
+            subject=data,
+            body='',  # это то же, что и message
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=emails,  # это то же, что и recipients_list
+        )
+        msg.attach_alternative(html_content, 'text/html')  # добавляем html
+        msg.send()  # отсылаем
+
     return render(request, 'send_mail.html', {
         # 'form': form,
         'form': form
