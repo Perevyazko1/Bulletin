@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import redirect, render
@@ -8,9 +10,6 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 
 from .forms import PostForm, ResponseForm, SendMailForm
 from .models import AuthUser, Post, Response, User
-
-from django.conf import settings
-from django.contrib.auth.decorators import user_passes_test
 
 
 class Profile(ListView):
