@@ -6,6 +6,7 @@
 
 {% block branding %}
 <h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
+
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
@@ -13,4 +14,9 @@
 {% load static %}
 {% block extrastyle %}
 <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'sendmail' %}">Отправка рассылки</a>
 {% endblock %}
