@@ -14,7 +14,8 @@
                         {% if response.status %}
                             <a href="{% url 'accept_response' response.id %}" class="btn btn-secondary btn-sm">Отменить отклик</a>
                             {% else %}
-                            <a href="{% url 'accept_response' response.id %}" class="btn btn-secondary btn-sm">Принять отклик</a></p>
+                            <a href="{% url 'accept_response' response.id %}" class="btn btn-secondary btn-sm">Принять отклик</a>
+                            <a href="{% url 'delete_response' response.id %}" class="btn btn-secondary btn-sm">Удалить отклик</a></p>
                         {% endif %}
             {% endfor %}
 {% endblock content %}

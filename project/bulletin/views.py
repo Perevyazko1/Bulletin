@@ -125,6 +125,14 @@ def accept_response(request, pk):
     return redirect(reverse('user_response', args=[str(p)]))
 
 
+@login_required  # проверка зареган ли user
+def delete_response(request, pk):
+    response = Response.objects.get(id=pk)
+    p = response.commentPost.id
+    response.delete()
+    return redirect(reverse('user_response', args=[str(p)]))
+
+
 # class SendMail(View):
 #     # raise_exception = True
 #     # form_class = ResponseForm
