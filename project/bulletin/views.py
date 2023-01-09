@@ -8,6 +8,7 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 
 from .forms import PostForm, ResponseForm, SendMailForm
 from .models import AuthUser, Post, Response, User
+
 from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 
