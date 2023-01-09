@@ -97,7 +97,6 @@ class ResponseCreate(LoginRequiredMixin, CreateView):
 
 @login_required
 def user_response(request, pk):
-    user = request.user
     post = Post.objects.get(id=pk)
     response = Response.objects.filter(commentPost=post)
     return render(request, 'user_response.html', {
@@ -129,13 +128,12 @@ def delete_response(request, pk):
 def send_mail(request):
     form = SendMailForm(request.POST or None)
     # print(code.uuid)
-    if request.method =='POST':
+    if request.method == 'POST':
         data = request.POST.get('text')
         users = User.objects.all()
-        emails=[]
+        emails = []
         for user in users:
             emails += [user.email]
-            # print(emails)
 
         html_content = render_to_string(
             'send_news.html',

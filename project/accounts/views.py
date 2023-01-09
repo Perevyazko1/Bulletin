@@ -17,10 +17,10 @@ class SignUp(CreateView):
 def authenticate(request):
     code = AuthUser.objects.get(user=request.user)
     form = AuthenticateForm(request.POST or None)
-    if request.method =='POST':
+    if request.method == 'POST':
         data = request.POST.get('code')
         if str(code.uuid) == data:
-            a=AuthUser.objects.filter(user=request.user)
+            a = AuthUser.objects.filter(user=request.user)
             a.update(authenticate=True)
     return render(request, 'registration/insert_code.html', {
         'form': form,

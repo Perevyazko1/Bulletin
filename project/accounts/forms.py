@@ -22,4 +22,3 @@ class SignUpForm(UserCreationForm):
 
 class AuthenticateForm(forms.Form):
     code = forms.UUIDField(label="code")
-

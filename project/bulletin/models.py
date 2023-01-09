@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Count
 from django.urls import reverse
 from ckeditor_uploader.fields import RichTextUploadingField
 import uuid
@@ -57,13 +56,10 @@ class Post(models.Model):
 
     category = models.CharField(
         max_length=128, choices=CATEGORY_CHOICES,
-        default=TANK, verbose_name='Тип' # все продукты в категории будут доступны через поле
+        default=TANK, verbose_name='Тип'
     )
-    # categoryType = models.CharField(max_length=2, choices=CATEGORY_CHOICES,
-    #                                 default=ARTICLE, verbose_name='Тип')
     title = models.CharField(max_length=128, verbose_name='Заголовок')
     text = RichTextUploadingField()
-
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
@@ -88,5 +84,3 @@ class Response(models.Model):
 
     def __str__(self):
         return f'{self.dateCreation} {self.text} {self.commentUser}'
-    # def get_absolute_url(self):
-    #     return reverse('profile')

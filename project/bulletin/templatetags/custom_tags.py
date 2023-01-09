@@ -22,5 +22,3 @@ def url_replace(context, **kwargs):
 @register.simple_tag()
 def current_hour():
     return timezone.localtime(timezone.now()).hour
-
-

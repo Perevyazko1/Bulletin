@@ -9,8 +9,6 @@ CURRENCIES_SYMBOLS = {
 black_words = ["чеснок", "редиска", "war"]
 
 
-# Регистрируем наш фильтр под именем currency, чтоб Django понимал,
-# что это именно фильтр для шаблонов, а не простая функция.
 @register.filter()
 def currency(value, code='rub'):
     """
@@ -18,7 +16,6 @@ def currency(value, code='rub'):
    """
 
     postfix = CURRENCIES_SYMBOLS[code]
-    # Возвращаемое функцией значение подставится в шаблон.
     return f'{value}{postfix}'
 
 
