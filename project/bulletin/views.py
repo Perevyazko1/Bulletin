@@ -1,16 +1,15 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMultiAlternatives
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
-from django.views import View
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
 from .forms import PostForm, ResponseForm, SendMailForm
 from .models import Post, User, Response, AuthUser
 from django.conf import settings
+from django.contrib.auth.decorators import user_passes_test
 
 
 class Profile(ListView):
@@ -26,7 +25,6 @@ class Profile(ListView):
         context['email'] = self.request.user.email
         context['post'] = Post.objects.filter(author=author)
         context['authenticate'] = AuthUser.objects.get(user=self.request.user)
-        # добавляем в контекст все доступные часовые пояса
         return context
 
 
@@ -57,15 +55,11 @@ class PostCreate(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'edit_post.html'
 
-    def form_valid(self, form):  # Переопределение метода при валидации формы NewsForm
-        # print(self.request.user.id)
+    def form_valid(self, form):
 
         self.object = form.save(commit=False
-                                )  # object - экземпляр заполненной формы NewsForm из запроса POST. В БД не сохраняем
+                                )
         self.object.author = User.objects.get(id=self.request.user.id)
-        # Назначяем полю author модели News экзамеляр модели Author, где пользователь-автор совпадает с
-
-        # пользователем-юзер
         return super().form_valid(
             form)
 
@@ -82,8 +76,6 @@ class PostDelete(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'delete_post.html'
     success_url = reverse_lazy('post_list')
-
-
 
 
 class ResponseCreate(LoginRequiredMixin, CreateView):
@@ -103,7 +95,7 @@ class ResponseCreate(LoginRequiredMixin, CreateView):
             form)
 
 
-@login_required  # проверка зареган ли user
+@login_required
 def user_response(request, pk):
     user = request.user
     post = Post.objects.get(id=pk)
@@ -112,7 +104,7 @@ def user_response(request, pk):
         'responses': response})
 
 
-@login_required  # проверка зареган ли user
+@login_required
 def accept_response(request, pk):
     r = Response.objects.filter(id=pk)
     response = Response.objects.get(id=pk)
@@ -125,7 +117,7 @@ def accept_response(request, pk):
     return redirect(reverse('user_response', args=[str(p)]))
 
 
-@login_required  # проверка зареган ли user
+@login_required
 def delete_response(request, pk):
     response = Response.objects.get(id=pk)
     p = response.commentPost.id
@@ -133,13 +125,7 @@ def delete_response(request, pk):
     return redirect(reverse('user_response', args=[str(p)]))
 
 
-# class SendMail(View):
-#     # raise_exception = True
-#     # form_class = ResponseForm
-#     # model = Response
-#     template_name = 'send_mail.html'
-#     success_url = reverse_lazy('sendmail')
-
+@user_passes_test(lambda u: u.is_superuser)
 def send_mail(request):
     form = SendMailForm(request.POST or None)
     # print(code.uuid)
