@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from accounts.views import authenticate
-from bulletin.views import send_mail
+from bulletin.views import send_mail, successful_submission
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -23,6 +23,7 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('admin_send_mail/', send_mail, name='sendmail'),
+    path('successful_submission/', successful_submission, name='successful_submission'),
     path('bulletin/', include('bulletin.urls')),
     path(r'ckeditor/', include('ckeditor_uploader.urls')),
     path('accounts/', include('django.contrib.auth.urls')),

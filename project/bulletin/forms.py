@@ -25,4 +25,4 @@ class ResponseForm(forms.ModelForm):
 
 
 class SendMailForm(forms.Form):
-    text = forms.CharField(max_length=128)
+    text = forms.CharField(max_length=1128, widget=forms.Textarea)

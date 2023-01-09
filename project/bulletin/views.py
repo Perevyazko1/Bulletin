@@ -127,33 +127,36 @@ def delete_response(request, pk):
 @user_passes_test(lambda u: u.is_superuser)
 def send_mail(request):
     form = SendMailForm(request.POST or None)
-    # print(code.uuid)
     if request.method == 'POST':
         data = request.POST.get('text')
         users = User.objects.all()
         emails = []
-        for user in users:
-            emails += [user.email]
+        if form.is_valid():
+            for user in users:
+                emails += [user.email]
 
-        html_content = render_to_string(
-            'send_news.html',
-            {
-                'link': settings.SITE_URL,
-                'message': data
-            }
-        )
+            html_content = render_to_string(
+                'send_news.html',
+                {
+                    'link': settings.SITE_URL,
+                    'message': data
+                }
+            )
 
-        msg = EmailMultiAlternatives(
-            subject=data,
-            body='',  # это то же, что и message
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=emails,  # это то же, что и recipients_list
-        )
-        msg.attach_alternative(html_content, 'text/html')  # добавляем html
-        msg.send()  # отсылаем
-
+            msg = EmailMultiAlternatives(
+                subject=data,
+                body='',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=emails,
+            )
+            msg.attach_alternative(html_content, 'text/html')
+            msg.send()
+            return redirect(reverse('successful_submission'))
     return render(request, 'send_mail.html', {
-        # 'form': form,
         'form': form
-
     })
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def successful_submission(request):
+    return render(request, 'successful_submission.html')
