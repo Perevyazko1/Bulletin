@@ -1,13 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMultiAlternatives
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
-from django.urls import reverse_lazy, reverse
-from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from .forms import PostForm, ResponseForm, SendMailForm
-from .models import Post, User, Response, AuthUser
+from .models import AuthUser, Post, Response, User
 from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 

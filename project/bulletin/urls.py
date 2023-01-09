@@ -1,8 +1,8 @@
 from django.urls import path
 from django.views.decorators.cache import cache_page
 
-from .views import PostDetail, PostList, Profile, PostCreate, PostUpdate, PostDelete, ResponseCreate, \
-    user_response, accept_response, delete_response
+from .views import accept_response, delete_response, PostCreate, PostDelete, PostDetail, PostList, PostUpdate, \
+    Profile, ResponseCreate, user_response
 
 urlpatterns = [
     path('', cache_page(5)(PostList.as_view()), name='post_list'),

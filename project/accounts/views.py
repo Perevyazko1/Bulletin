@@ -1,9 +1,8 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
-
 from bulletin.models import AuthUser
-from .forms import SignUpForm, AuthenticateForm
+from .forms import AuthenticateForm, SignUpForm
 
 
 class SignUp(CreateView):

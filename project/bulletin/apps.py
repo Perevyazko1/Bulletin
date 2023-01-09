@@ -6,4 +6,4 @@ class BulletinConfig(AppConfig):
     name = 'bulletin'
 
     def ready(self):
-        from . import signals
+        from . import signals # noqa
