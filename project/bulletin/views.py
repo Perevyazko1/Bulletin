@@ -1,15 +1,13 @@
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import redirect, render
-from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from .forms import PostForm, ResponseForm, SendMailForm
 from .models import AuthUser, Post, Response, User
+from .tasks import submission_news
 
 
 class Profile(ListView):
@@ -134,23 +132,8 @@ def send_mail(request):
         if form.is_valid():
             for user in users:
                 emails += [user.email]
+            submission_news.delay(data, emails)
 
-            html_content = render_to_string(
-                'send_news.html',
-                {
-                    'link': settings.SITE_URL,
-                    'message': data
-                }
-            )
-
-            msg = EmailMultiAlternatives(
-                subject=data,
-                body='',
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                to=emails,
-            )
-            msg.attach_alternative(html_content, 'text/html')
-            msg.send()
             return redirect(reverse('successful_submission'))
     return render(request, 'send_mail.html', {
         'form': form
