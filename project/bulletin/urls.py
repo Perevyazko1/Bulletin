@@ -5,7 +5,7 @@ from .views import accept_response, delete_response, PostCreate, PostDelete, Pos
     Profile, ResponseCreate, user_response
 
 urlpatterns = [
-    path('', cache_page(60 * 5)(PostList.as_view()), name='post_list'),
+    path('', cache_page(5)(PostList.as_view()), name='post_list'),
     path('<int:pk>', PostDetail.as_view(), name='post_detail'),
     path('create/', PostCreate.as_view(), name='post_create'),
     path('<int:pk>/update/', PostUpdate.as_view(), name='post_update'),

@@ -10,11 +10,11 @@ from .tasks import send_email
 
 
 @receiver(post_save, sender=Response)
-def update_status_response(instance, **kwargs):
+def update_status_response(created, instance, **kwargs):
     """
     Сигнал на отправку почты, о принятии отклика
     """
-    if not instance.status:
+    if not created:
         id = instance.id
         r = Response.objects.get(id=id)
         user = r.commentUser.username
