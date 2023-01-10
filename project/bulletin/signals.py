@@ -6,27 +6,7 @@ from django.dispatch import receiver
 from django.template.loader import render_to_string
 
 from .models import AuthUser, Response
-
-
-def send_email(user, email, post, message):
-    html_content = render_to_string(
-        'send_response.html',
-        {
-            'link': settings.SITE_URL,
-            'post': post,
-            'user': user,
-            'message': message
-        }
-    )
-
-    msg = EmailMultiAlternatives(
-        subject=message,
-        body='',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=email,
-    )
-    msg.attach_alternative(html_content, 'text/html')
-    msg.send()
+from .tasks import send_email
 
 
 @receiver(post_save, sender=Response)
@@ -38,7 +18,7 @@ def update_status_response(instance, **kwargs):
         email = [r.commentUser.email]
         post = r.commentPost.get_absolute_url()
         message = 'На твой отклик ответили.'
-        send_email(user, email, post, message)
+        send_email.delay(user, email, post, message)
 
 
 @receiver(post_save, sender=Response)
@@ -50,7 +30,7 @@ def get_response(created, instance, **kwargs):
         email = [r.commentPost.author.email]
         post = r.commentPost.get_absolute_url()
         message = 'Вам оставили отклик.'
-        send_email(user, email, post, message)
+        send_email.delay(user, email, post, message)
 
 
 @receiver(post_save, sender=User)

@@ -213,15 +213,15 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-ACCOUNT_EMAIL_REQUIRED = True  # email является обязательным
-ACCOUNT_UNIQUE_EMAIL = True  # email является  уникальным
-ACCOUNT_USERNAME_REQUIRED = False  # username необязательный
-ACCOUNT_AUTHENTICATION_METHOD = 'email'  # аутентификация будет происходить посредством электронной почты
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # верификация почты обязательно
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.mail.ru'  # адрес сервера Яндекс-почты для всех один и тот же
-EMAIL_PORT = 465  # порт smtp сервера тоже одинаковый
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 465
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")  # ваше имя пользователя, например, если ваша почта user@yandex.ru,
 # то сюда надо писать user, иными словами, это всё то что идёт до собаки
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")  # пароль от почты
@@ -229,3 +229,10 @@ EMAIL_USE_SSL = True  # Яндекс использует ssl, подробне�
 # но включать его здесь обязательно
 SERVER_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
+
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
