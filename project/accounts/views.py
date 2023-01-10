@@ -15,6 +15,9 @@ class SignUp(CreateView):
 
 
 def authenticate(request):
+    """
+    Представление аутентификации с формой ввода кода
+    """
     code = AuthUser.objects.get(user=request.user)
     form = AuthenticateForm(request.POST or None)
     if request.method == 'POST':

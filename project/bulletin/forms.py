@@ -4,6 +4,9 @@ from .models import Post, Response
 
 
 class PostForm(forms.ModelForm):
+    """
+    Форма для создания объявления
+    """
     title = forms.CharField(max_length=128)
 
     class Meta:
@@ -17,6 +20,9 @@ class PostForm(forms.ModelForm):
 
 
 class ResponseForm(forms.ModelForm):
+    """
+    Форма для создания отклика
+    """
     class Meta:
         model = Response
         fields = [
@@ -25,4 +31,7 @@ class ResponseForm(forms.ModelForm):
 
 
 class SendMailForm(forms.Form):
+    """
+    Форма рассылки новостей из админ-панели
+    """
     text = forms.CharField(max_length=1128, widget=forms.Textarea)

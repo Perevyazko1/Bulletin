@@ -11,6 +11,9 @@ from .tasks import send_email
 
 @receiver(post_save, sender=Response)
 def update_status_response(instance, **kwargs):
+    """
+    Сигнал на отправку почты, о принятии отклика
+    """
     if not instance.status:
         id = instance.id
         r = Response.objects.get(id=id)
@@ -23,6 +26,10 @@ def update_status_response(instance, **kwargs):
 
 @receiver(post_save, sender=Response)
 def get_response(created, instance, **kwargs):
+    """
+    Сигнал на отправку почты, об отклике на объявление
+    """
+
     if created:
         id = instance.id
         r = Response.objects.get(id=id)
@@ -35,6 +42,9 @@ def get_response(created, instance, **kwargs):
 
 @receiver(post_save, sender=User)
 def send_response(created, instance, **kwargs):
+    """
+    Сигнал на отправку почты, кода авторизации
+    """
     if created:
         p = AuthUser.objects.create(user=instance)
 
@@ -50,5 +60,8 @@ def send_response(created, instance, **kwargs):
 
 @receiver(post_save, sender=Post)
 def update_post(sender, instance, **kwargs):
+    """
+    Сигнал на сброс кэш на странице объявления
+    """
     id = str(instance.id)
     cache.delete(f'bulletins-{id}')

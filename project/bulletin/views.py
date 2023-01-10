@@ -104,6 +104,9 @@ class ResponseCreate(LoginRequiredMixin, CreateView):
 
 @login_required
 def user_response(request, pk):
+    """
+    Представление для отображения всех откликов на объявления пользователя
+    """
     post = Post.objects.get(id=pk)
     response = Response.objects.filter(commentPost=post)
     return render(request, 'user_response.html', {
@@ -112,6 +115,9 @@ def user_response(request, pk):
 
 @login_required
 def accept_response(request, pk):
+    """
+    Представление для принятия и отмены отклика
+    """
     r = Response.objects.filter(id=pk)
     response = Response.objects.get(id=pk)
     p = response.commentPost.id
@@ -125,6 +131,9 @@ def accept_response(request, pk):
 
 @login_required
 def delete_response(request, pk):
+    """
+    Представление для удаления отклика
+    """
     response = Response.objects.get(id=pk)
     p = response.commentPost.id
     response.delete()
@@ -133,6 +142,9 @@ def delete_response(request, pk):
 
 @user_passes_test(lambda u: u.is_superuser)
 def send_mail(request):
+    """
+    Представление из админ-панели, для рассылки новостей пользователям
+    """
     form = SendMailForm(request.POST or None)
     if request.method == 'POST':
         data = request.POST.get('text')
@@ -151,4 +163,7 @@ def send_mail(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def successful_submission(request):
+    """
+    Представление из админ-панели, об успешной рассылке
+    """
     return render(request, 'successful_submission.html')

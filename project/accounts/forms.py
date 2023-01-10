@@ -21,4 +21,7 @@ class SignUpForm(UserCreationForm):
 
 
 class AuthenticateForm(forms.Form):
+    """
+    Форма ввода кода аутентификации
+    """
     code = forms.UUIDField(label="code")
