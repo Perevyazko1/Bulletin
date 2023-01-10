@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
@@ -36,6 +37,14 @@ class PostDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context['authenticate'] = AuthUser.objects.get(user=self.request.user)
         return context
+
+    def get_object(self, *args, **kwargs):
+        obj = cache.get(f'bulletins-{self.kwargs["pk"]}',
+                        None)
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'bulletins-{self.kwargs["pk"]}', obj)
+        return obj
 
 
 class PostList(ListView):

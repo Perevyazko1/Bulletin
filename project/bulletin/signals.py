@@ -1,10 +1,11 @@
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .models import AuthUser, Response
+from .models import AuthUser, Post, Response
 from .tasks import send_email
 
 
@@ -45,3 +46,9 @@ def send_response(created, instance, **kwargs):
             to=email,
         )
         msg.send()
+
+
+@receiver(post_save, sender=Post)
+def update_post(sender, instance, **kwargs):
+    id = str(instance.id)
+    cache.delete(f'bulletins-{id}')
