@@ -34,7 +34,7 @@
             />
 
             <i>{{ post.text|censor|safe }}</i>
-            {% if authenticate.authenticate %}
+            {% if authenticate %}
                 <p class="text-center"><a href="{% url 'response' post.id %}" class="btn btn-secondary btn-sm">Оставить отклик</a></p>
             {% endif %}
         </h4>

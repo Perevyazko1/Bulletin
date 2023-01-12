@@ -35,7 +35,13 @@ class PostDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['authenticate'] = AuthUser.objects.get(user=self.request.user)
+        if str(self.request.user) == 'AnonymousUser':
+            context['authenticate'] = False
+        else:
+            context['authenticate'] = AuthUser.objects.get(user=self.request.user).authenticate
+
+
+
         return context
 
     def get_object(self, *args, **kwargs):
